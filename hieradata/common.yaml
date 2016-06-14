@@ -1,0 +1,78 @@
+---
+# Variables
+variables:
+  - &enable_firewall true
+  - &hiera_hierarchy
+    - "%{literal('%')}{clientcert}"
+    - "%{literal('%')}{tier}"
+    - "%{literal('%')}{pp_role}"
+    - "%{literal('%')}{data_centre}"
+    - common
+  - &hiera_backends
+    yaml:
+      datadir: "/etc/puppetlabs/code/environments/%{literal('%')}{environment}/hieradata"
+    json:
+      datadir: "/etc/puppetlabs/code/environments/%{literal('%')}{environment}/hieradata"
+  - &manage_r10k true
+  - &manage_heira true
+  - &r10k_sources
+    base:
+      remote: 'https://github.com/beergeek/scale.git'
+      basedir: '/etc/puppetlabs/code/environments'
+
+
+# COM
+profile::com::manage_r10k: *manage_r10k
+profile::com::r10k_sources: *r10k_sources
+profile::com::manage_hiera: *manage_heira
+profile::com::hiera_hierarchy: *hiera_hierarchy
+profile::com::hiera_backends: *hiera_backends
+profile::com::enable_firewall: *enable_firewall
+
+# MOM
+profile::mom::manage_r10k: *manage_r10k
+profile::mom::r10k_sources: *r10k_sources
+profile::mom::manage_hiera: *manage_heira
+profile::mom::hiera_hierarchy: *hiera_hierarchy
+profile::mom::hiera_backends: *hiera_backends
+profile::mom::enable_firewall: *enable_firewall
+
+
+# Load Balancer
+profile::lb_services::enable_firewall: *enable_firewall
+profile::lb_services::listeners:
+  stats:
+    collect_exported: false
+    ipaddress: "%{::ipaddress_eth1}"
+    ports: '9090'
+    options:
+      mode: 'http'
+      stats: ['uri /', 'auth puppet:puppet']
+  http00:
+    collect_exported: true
+    ipaddress: "%{::ipaddress_eth1}"
+    ports: '80'
+    options:
+      mode: 'tcp'
+  https00:
+    collect_exported: true
+    ipaddress: "%{::ipaddress_eth1}"
+    ports: '443'
+    options:
+      mode: 'tcp'
+  puppet00:
+    collect_exported: true
+    ipaddress: "%{::ipaddress_eth1}"
+    ports: '8140'
+    options:
+      mode: 'tcp'
+  mco00:
+    collect_exported: true
+    ipaddress: "%{::ipaddress_eth1}"
+    ports: '61613'
+    options:
+      mode: 'tcp'
+      balance: 'source'
+
+# BASE
+profile::base::enable_firewall: *enable_firewall

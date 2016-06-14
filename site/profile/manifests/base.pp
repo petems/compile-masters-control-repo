@@ -7,6 +7,10 @@ class profile::base {
     require => Class['profile::fw::pre'],
   }
 
+  package { 'ruby':
+    ensure => present,
+  }
+
   if $enable_firewall {
     class { 'firewall':
     }

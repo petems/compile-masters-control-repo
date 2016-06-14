@@ -48,18 +48,6 @@ profile::lb_services::haproxy::listeners:
     options:
       mode: 'http'
       stats: ['uri /', 'auth puppet:puppet']
-  http00:
-    collect_exported: true
-    ipaddress: "%{::ipaddress_eth1}"
-    ports: '80'
-    options:
-      mode: 'tcp'
-  https00:
-    collect_exported: true
-    ipaddress: "%{::ipaddress_eth1}"
-    ports: '443'
-    options:
-      mode: 'tcp'
   puppet00:
     collect_exported: true
     ipaddress: "%{::ipaddress_eth1}"

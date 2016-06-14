@@ -24,4 +24,24 @@ class profile::base {
     group  => 'root',
     mode   => '0700',
   }
+
+  @@host { $::fqdn:
+    ensure        => present,
+    host_aliases  => [$::hostname],
+    ip            => $::ipaddress_eth1,
+  }
+
+  host { 'localhost':
+    ensure       => present,
+    host_aliases => ['localhost.localdomai','localhost6','localhost6.localdomain6'],
+    ip           => '127.0.0.1',
+  }
+
+  Host <<| |>>
+
+  if $purge {
+    resources { 'host':
+      purge => true,
+    }
+  }
 }

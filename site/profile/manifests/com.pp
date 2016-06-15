@@ -72,7 +72,7 @@ class profile::com {
 
   if $manage_r10k {
     class { '::r10k':
-      version                 => '2.0.3',
+      version                 => '2.2.2',
       configfile              => '/etc/puppetlabs/r10k/r10k.yaml',
       sources                 => $r10k_sources,
       notify                  => Exec['r10k_sync'],

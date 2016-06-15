@@ -14,7 +14,7 @@ variables:
     json:
       datadir: "/etc/puppetlabs/code/environments/%{literal('%')}{environment}/hieradata"
   - &manage_r10k true
-  - &manage_heira false
+  - &manage_heira true
   - &r10k_sources
     base:
       remote: 'https://github.com/beergeek/scale.git'

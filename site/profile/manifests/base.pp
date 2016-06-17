@@ -7,6 +7,12 @@ class profile::base {
     require => Class['profile::fw::pre'],
   }
 
+  firewall { '111 allow SSH access':
+    port   => [22],
+    proto  => tcp,
+    action => accept,
+  }
+
   package { 'ruby':
     ensure => present,
   }

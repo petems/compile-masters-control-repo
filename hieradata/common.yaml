@@ -17,7 +17,7 @@ variables:
   - &manage_heira true
   - &r10k_sources
     base:
-      remote: 'https://github.com/beergeek/scale.git'
+      remote: 'https://github.com/petems/compile-masters-control-repo.git'
       basedir: '/etc/puppetlabs/code/environments'
 
 

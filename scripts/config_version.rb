@@ -1,14 +1,24 @@
-#!/opt/puppetlabs/puppet/bin/ruby
-require 'json'
-require 'socket'
+#!/usr/bin/env ruby
+begin
+  require 'rugged'
+  require 'socket'
+rescue LoadError => e
+  t = Time.new
+  puts t.to_i
+else
+  environmentpath = ARGV[0]
+  environment     = ARGV[1]
 
-compile_master  = Socket.gethostname
-environmentpath = ARGV[0]
-environment     = ARGV[1]
+  # Get the hostname of the Puppet master compiling the catalog.
+  compiling_master = Socket.gethostname
 
-# Get the short SHA1 commit ID from the control repository.
-r10k_deploy_file_path = File.join(environmentpath, environment, '.r10k-deploy.json')
-commit_id_short = JSON.parse(File.read(r10k_deploy_file_path))['signature'][0...11]
+  # Get the path to the environment being compiled.
+  repo = Rugged::Repository.discover(File.join(environmentpath, environment))
+  head = repo.head
 
-# Show the compiling master, environment name, and short commit ID.
-puts "#{compile_master}-#{environment}-#{commit_id_short}"
+  # First 12 characters of the sha1 hash of the newest commit.
+  commit_id = head.target_id[0...11]
+
+  # Show the compiling master, environment name, and commit ID.
+  puts "#{compiling_master}-#{environment}-#{commit_id}"
+end

@@ -13,7 +13,7 @@ variables:
       datadir: "/etc/puppetlabs/code/environments/%{literal('%')}{environment}/hieradata"
     json:
       datadir: "/etc/puppetlabs/code/environments/%{literal('%')}{environment}/hieradata"
-  - &manage_r10k true
+  - &manage_r10k false
   - &manage_heira true
   - &r10k_sources
     base:
